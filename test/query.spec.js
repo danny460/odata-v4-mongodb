@@ -24,4 +24,11 @@ describe("mongodb query", () => {
       expect(f.query).to.deep.equal({ Description: /c/gi });
       expect(f.sort).to.deep.equal({ Name: 1 });
   });
+
+  it("expression: $apply=groupby((time),aggregate(amount with sum as total))/aggregate(sales/amount with sum as total)", () => {
+      expect(f.aggregate).to.deep.equal([
+        { $group: { _id: "$time", total: { $sum: { $multiply: [ "$price", "$quantity" ] } } } },
+        { $group: { _id: "$time", monthlyAverage: { $avg: "$total"}}},
+      ])
+  })
 });
