@@ -106,7 +106,28 @@ export class Visitor{
 		this.Visit(node.value, context);
 		delete context.identifier;
 		delete context.literal;
-	}
+  }
+  
+  protected VisitApply(node: Token, context: any) {
+    this.Visit(node.value, context);
+    // post processing on filter
+  }
+
+  protected VisitSetTransformations(node: Token, context: any) {
+    const pipe = node.value.pipe;
+    context.aggregate = [];
+    pipe.forEach(token => {
+      this.VisitSetTransformation(token, context);
+    });
+  }
+
+  protected VisitSetTransformation(node: Token, context: any) {
+
+  }
+
+  protected VisitAggregateExpression(node: Token, context: any) {
+
+  }
 
 	protected VisitOrderBy(node:Token, context:any){
 		context.sort = {};
